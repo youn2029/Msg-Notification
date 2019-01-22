@@ -68,33 +68,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             }
         } else {    // UILocalNotification 객체를 이용한 로컬 알림 (iOS 10 이하)
-//            // 알림 설정 확인
-//            let setting = application.currentUserNotificationSettings
-//
-//            // 알림 설정이 되어 있지 않다면 로컬 알림을 보내도 받을 수 없으므로 종료함
-//            // 알림 허용이 안되면 UIUserNotificationType.none으로 나타남
-//            guard setting?.types != .none else {
-//                print("Can't Schedule")
-//                return
-//            }
-//
-//            // 로컬 알람 인스턴스 생성
-//            let noti = UILocalNotification()
-//
-//            noti.fireDate = Date(timeIntervalSinceNow: 10)          // 발송시간 : 10초 후 발송
-//            noti.timeZone = TimeZone.autoupdatingCurrent            // 현재 위치에 따라 타임존 설정
-//            // timezone : 발송될 시각에 대한 시간대를 설정하는 속성
-//            // .autoupdatingCurrent : 현재 위치를 바탕으로 시간대를 자동으로 업데이트하는 것
-//
-//            noti.alertBody = "얼른 다시 접속하세요!!!"                   // 표시될 메시지
-//            noti.alertAction = "학습하기"                             // 잠금 상태일 때 표시될 액션
-//            noti.applicationIconBadgeNumber = 1                     // 앱 아이콘 모서리에 표시될 배지
-//            noti.soundName = UILocalNotificationDefaultSoundName    // 로컬 알람 도착시 사운드
-//            noti.userInfo = ["name":"홍길동"]                         // 로컬 알람 실행시 함께 전달하고 싶은 값(화면에는 표시되지 않음)
-//
-//            // 생성된 알람 객체를 스케줄러에 등록
-//            application.scheduleLocalNotification(noti)
-//            //application.presentLocalNotificationNow(noti) // fireDate 속성에 설정된 값을 무시하고 메시지를 즉각 발송
+            
+            // 알림 설정 확인
+            let setting = application.currentUserNotificationSettings
+
+            // 알림 설정이 되어 있지 않다면 로컬 알림을 보내도 받을 수 없으므로 종료함
+            // 알림 허용이 안되면 UIUserNotificationType.none으로 나타남
+            guard setting?.types != .none else {
+                print("Can't Schedule")
+                return
+            }
+
+            // 로컬 알람 인스턴스 생성
+            let noti = UILocalNotification()
+
+            noti.fireDate = Date(timeIntervalSinceNow: 10)          // 발송시간 : 10초 후 발송
+            noti.timeZone = TimeZone.autoupdatingCurrent            // 현재 위치에 따라 타임존 설정
+            // timezone : 발송될 시각에 대한 시간대를 설정하는 속성
+            // .autoupdatingCurrent : 현재 위치를 바탕으로 시간대를 자동으로 업데이트하는 것
+
+            noti.alertBody = "얼른 다시 접속하세요!!!"                   // 표시될 메시지
+            noti.alertAction = "학습하기"                             // 잠금 상태일 때 표시될 액션
+            noti.applicationIconBadgeNumber = 1                     // 앱 아이콘 모서리에 표시될 배지
+            noti.soundName = UILocalNotificationDefaultSoundName    // 로컬 알람 도착시 사운드
+            noti.userInfo = ["name":"홍길동"]                         // 로컬 알람 실행시 함께 전달하고 싶은 값(화면에는 표시되지 않음)
+
+            // 생성된 알람 객체를 스케줄러에 등록
+            application.scheduleLocalNotification(noti)
+            //application.presentLocalNotificationNow(noti) // fireDate 속성에 설정된 값을 무시하고 메시지를 즉각 발송
         }
     }
     
