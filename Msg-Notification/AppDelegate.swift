@@ -10,7 +10,7 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
@@ -19,11 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        if #available(iOS 11.0, *) {    // iOS 11.0 이상
+        if #available(iOS 10.0, *) {    // iOS 10.0 이상
+            
             // 경고창, 배지, 사운드를 사용하는 알림 환경 정보를 생성하고, 사용자 동의 여부 창을 실행
             let notiCenter = UNUserNotificationCenter.current()     // 인스턴스 가져오기
             notiCenter.requestAuthorization(options: [.alert, .badge, .sound]){(didAllow, e) in }
+            notiCenter.delegate = self  // 알림을 클릭했을 때 감시
         } else {
+            
             // 경고창, 배지, 사운드를 사용하는 알림 환경 정보를 생성하고, 이를 애플리케이션에 저장
             let setting = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(setting)
@@ -56,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)    // 인자값 : 발송시간, 반복 여부
                     
                     // 알림 요청 객체
-                    let request = UNNotificationRequest(identifier: "wakeUp", content: nContent, trigger: trigger)
+                    let request = UNNotificationRequest(identifier: "wakeup", content: nContent, trigger: trigger)
                     
                     // 노티피게이션 센터에 추가
                     UNUserNotificationCenter.current().add(request)
@@ -75,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                return
 //            }
 //
-//            // 로컬 알람 인스턴스 생성
+//            // 로컬 알람 인스턴스 생성
 //            let noti = UILocalNotification()
 //
 //            noti.fireDate = Date(timeIntervalSinceNow: 10)          // 발송시간 : 10초 후 발송
@@ -93,6 +96,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            application.scheduleLocalNotification(noti)
 //            //application.presentLocalNotificationNow(noti) // fireDate 속성에 설정된 값을 무시하고 메시지를 즉각 발송
         }
+    }
+    
+    // 알림 메시지를 클릭하면 호출되는 메소드
+    // 앱 실행 도중에 알림 메시지가 도착한 경우
+    @available(iOS 10.0, *) // iOS 10.0부터 사용 할 수 있음
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        if notification.request.identifier == "wakeup" {
+            let userInfo = notification.request.content.userInfo
+            print(userInfo["name"]!)
+        }
+        
+        // 알림 배너 띄워주기
+        completionHandler([.alert, .badge, .sound]) //
+    }
+    
+    // 사용자가 알림 메시지를 클릭했을 경우
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.notification.request.identifier == "wakeup" {
+            let userInfo = response.notification.request.content.userInfo
+            print(userInfo["name"]!)
+        }
+        completionHandler()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
