@@ -32,6 +32,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             application.registerUserNotificationSettings(setting)
         }
         
+        // 알림 센터를 통해 알림을 클릭했을 때, 또는 잠금 화면에서 알림 메시지를 눌러 잠김 해제했을 경우에 실행 ==> launchOptions로 구분 (iOS 10.0 미만)
+        if let localNoti = launchOptions?[UIApplication.LaunchOptionsKey.localNotification] as? UILocalNotification {
+            
+            // 알림으로 인해 앱이 실행된 경우이다. 이때에는 알림과 관련된 처리를 해 준다
+            print((localNoti.userInfo?["name"])!)
+            
+            if application.applicationState == .active {
+                // 앱이 활성화 된 상태일 때 실행할 로직
+            } else if application.applicationState == .inactive {
+                // 앱이 비활성화된 상태일 때 실행할 로직
+            }
+        }
+        
         return true
     }
 
@@ -99,7 +112,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    // 알림 메시지를 클릭하면 호출되는 메소드
     // 앱 실행 도중에 알림 메시지가 도착한 경우
     @available(iOS 10.0, *) // iOS 10.0부터 사용 할 수 있음
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
